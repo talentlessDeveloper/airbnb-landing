@@ -13,6 +13,7 @@ import {
 } from "./ui/carousel";
 
 import dayjs from "dayjs";
+import { cn } from "~/lib/utils";
 
 export default function SingleHero({ m }: { m: AirbnbListing }) {
   const [api, setApi] = useState<CarouselApi>();
@@ -64,19 +65,17 @@ export default function SingleHero({ m }: { m: AirbnbListing }) {
         <CarouselPrevious className="left-2" />
         <CarouselNext className="right-2" />
         <div className="absolute bottom-5 left-1/2 flex -translate-x-1/2 gap-[2px]">
-          {/* {m.images.map((m, y) => {
-                  const active = y + 1;
-                  return (
-                    <span
-                      key={`ispan${y}`}
-                      className={cn("h-3 w-3 rounded-full bg-secondary/50", {
-                        "bg-secondary": current === active,
-                      })}
-                    >
-                      {current}
-                    </span>
-                  );
-                })} */}
+          {m.images.map((m, y) => {
+            const active = y + 1;
+            return (
+              <span
+                key={`ispan${y}`}
+                className={cn("h-3 w-3 rounded-full bg-secondary/50", {
+                  "bg-secondary": current === active,
+                })}
+              ></span>
+            );
+          })}
         </div>
       </Carousel>
       <div className="mt-2 tracking-tight">
