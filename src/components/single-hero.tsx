@@ -12,10 +12,15 @@ import {
   CarouselPrevious,
 } from "./ui/carousel";
 
+import dayjs from "dayjs";
+
 export default function SingleHero({ m }: { m: AirbnbListing }) {
   const [api, setApi] = useState<CarouselApi>();
   const [current, setCurrent] = useState(0);
   const [count, setCount] = useState(0);
+
+  const formattedStartDate = dayjs(m.date).format("MMM D");
+  const formattedEndDate = dayjs(m.endDate).format("D");
 
   useEffect(() => {
     if (!api) {
@@ -81,14 +86,16 @@ export default function SingleHero({ m }: { m: AirbnbListing }) {
             <span>
               <StarIcon className="h-4 w-4 fill-airbnb-dark" />
             </span>
-            <span>5.0</span>
+            <span>{m.rating ? m.rating : ""}</span>
           </p>
         </div>
         <div className="leading-[1.125rem] text-airbnb-light">
           <p className="">{m.title}</p>
-          <p className="">Sep 5 - 7</p>
+          <p className="">
+            {formattedStartDate} - {formattedEndDate}
+          </p>
         </div>
-        <p className="mt-[3px] font-semibold">$120 night</p>
+        <p className="mt-[3px] font-semibold">${m.price} night</p>
       </div>
     </div>
   );
