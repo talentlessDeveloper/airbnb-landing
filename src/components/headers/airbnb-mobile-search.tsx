@@ -17,6 +17,7 @@ import { cn } from "~/lib/utils";
 import { Button } from "../ui/button";
 import { Calendar } from "../ui/calendar";
 import { Separator } from "../ui/separator";
+import Link from "next/link";
 
 export default function AirbnbSearchMobile() {
   const [openMenu, setOpenMenu] = useState(false);
@@ -76,6 +77,11 @@ export function TabsDemo() {
   const [activeTab, setActiveTab] = useState<"region" | "date" | "guest">(
     "region",
   );
+  const [guest, setGuests] = useState({
+    adult: 0,
+    children: 0,
+    infant: 0,
+  });
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
@@ -114,38 +120,47 @@ export function TabsDemo() {
                     {
                       src: "https://a0.muscache.com/pictures/f9ec8a23-ed44-420b-83e5-10ff1f071a13.jpg?im_w=320",
                       continent: "I'm flexible",
+                      region: "all",
                     },
                     {
                       src: "https://a0.muscache.com/im/pictures/7b5cf816-6c16-49f8-99e5-cbc4adfd97e2.jpg?im_w=320",
                       continent: "europe",
+                      region: "europe",
                     },
                     {
                       src: "https://a0.muscache.com/im/pictures/dbb2b5ef-2efe-4099-81ac-c7b957f384ed.jpg?im_w=320",
-                      continent: "United Kingdom",
+                      continent: "Asia",
+                      region: "asia",
                     },
                     {
                       src: "https://a0.muscache.com/im/pictures/4e762891-75a3-4fe1-b73a-cd7e673ba915.jpg?im_w=320",
-                      continent: "United States",
+                      continent: "North America",
+                      region: "northamerica",
                     },
                     {
                       src: "https://a0.muscache.com/im/pictures/cd9f2bf0-eefc-4980-b7cb-9c8ca3dae883.jpg?im_w=320",
-                      continent: "Canada",
+                      continent: "South America",
+                      region: "southamerica",
                     },
                     {
                       src: "https://a0.muscache.com/im/pictures/d2309871-490d-452f-a61c-35b19ad3d75e.jpg?im_w=320",
-                      continent: "South Africa",
+                      continent: "Africa",
+                      region: "africa",
                     },
                   ].map((m, i) => {
                     return (
                       <div key={i}>
-                        <button className="flex aspect-square w-[123px] shrink-0 flex-col gap-[0.625rem] rounded-xl duration-200 hover:border hover:border-solid hover:border-airbnb-dark">
+                        <Link
+                          href={`?region=${m.region}`}
+                          className="flex aspect-square w-[123px] shrink-0 flex-col gap-[0.625rem] rounded-xl duration-200 hover:border hover:border-solid hover:border-airbnb-dark"
+                        >
                           <img
                             src={m.src}
                             alt="europe"
                             className="aspect-square h-full w-full rounded-xl object-cover"
                           />
                           <span className="sr-only">Europe</span>
-                        </button>
+                        </Link>
                         <p className="capitalize">{m.continent}</p>
                       </div>
                     );
@@ -190,11 +205,11 @@ export function TabsDemo() {
           </Button>
         )}
         {activeTab === "guest" ? (
-          <Card className="w-full rounded-3xl">
+          <Card className="w-full rounded-none border-none px-0 shadow-none">
             <CardHeader>
               <CardTitle> Who is coming?</CardTitle>
             </CardHeader>
-            <CardContent className="w-full space-y-2">
+            <CardContent className="w-full space-y-2 px-0">
               <div className="flex w-full items-center justify-between pb-3">
                 <div>
                   <p className="text-base font-semibold text-airbnb-dark">
@@ -203,15 +218,33 @@ export function TabsDemo() {
                   <p className="text-airbnb-light">Age 13 and above</p>
                 </div>
                 <div className="flex items-center gap-3">
-                  <button className="h-8 w-8">
+                  <button
+                    disabled={
+                      guest.adult === 0 ||
+                      (guest.infant > 0 && guest.adult === 1) ||
+                      (guest.children > 0 && guest.adult === 1)
+                    }
+                    className="h-8 w-8 text-airbnb-light/70 disabled:text-airbnb-light/30"
+                    onClick={() => {
+                      if (guest.adult === 0) {
+                        return;
+                      }
+                      setGuests((g) => ({ ...g, adult: g.adult - 1 }));
+                    }}
+                  >
                     <span>
-                      <MinusCircleIcon className="h-full w-full stroke-1 text-airbnb-light/60" />
+                      <MinusCircleIcon className="h-full w-full stroke-1 text-current" />
                     </span>
                   </button>
-                  <span>0</span>
-                  <button className="h-8 w-8">
+                  <span>{guest.adult}</span>
+                  <button
+                    className="h-8 w-8"
+                    onClick={() => {
+                      setGuests((g) => ({ ...g, adult: g.adult + 1 }));
+                    }}
+                  >
                     <span>
-                      <PlusCircleIcon className="h-full w-full stroke-1 text-airbnb-light/60" />
+                      <PlusCircleIcon className="h-full w-full stroke-1 text-airbnb-light/70" />
                     </span>
                   </button>
                 </div>
@@ -225,13 +258,35 @@ export function TabsDemo() {
                   <p className="text-airbnb-light">Ages 2 - 12</p>
                 </div>
                 <div className="flex items-center gap-3">
-                  <button className="h-8 w-8">
+                  <button
+                    className="h-8 w-8 text-airbnb-light/70 disabled:text-airbnb-light/30"
+                    disabled={guest.children === 0}
+                    onClick={() => {
+                      if (guest.children === 0) {
+                        return;
+                      }
+                      setGuests((g) => ({ ...g, children: g.children - 1 }));
+                    }}
+                  >
                     <span>
-                      <MinusCircleIcon className="h-full w-full stroke-1 text-airbnb-light/60" />
+                      <MinusCircleIcon className="h-full w-full stroke-1 text-current" />
                     </span>
                   </button>
-                  <span>0</span>
-                  <button className="h-8 w-8">
+                  <span>{guest.children}</span>
+                  <button
+                    className="h-8 w-8"
+                    onClick={() => {
+                      if (guest.adult === 0) {
+                        setGuests((g) => ({
+                          ...g,
+                          children: g.children + 1,
+                          adult: g.adult + 1,
+                        }));
+                        return;
+                      }
+                      setGuests((g) => ({ ...g, children: g.children + 1 }));
+                    }}
+                  >
                     <span>
                       <PlusCircleIcon className="h-full w-full stroke-1 text-airbnb-light/60" />
                     </span>
@@ -247,13 +302,38 @@ export function TabsDemo() {
                   <p className="text-airbnb-light">Under 2</p>
                 </div>
                 <div className="flex items-center gap-3">
-                  <button className="h-8 w-8">
+                  <button
+                    className="h-8 w-8 text-airbnb-light/70 disabled:text-airbnb-light/30"
+                    disabled={guest.infant === 0}
+                    onClick={() => {
+                      if (guest.infant === 0) {
+                        return;
+                      }
+                      setGuests((g) => ({ ...g, infant: g.infant - 1 }));
+                    }}
+                  >
                     <span>
-                      <MinusCircleIcon className="h-full w-full stroke-1 text-airbnb-light/60" />
+                      <MinusCircleIcon className="h-full w-full stroke-1 text-current" />
                     </span>
                   </button>
-                  <span>0</span>
-                  <button className="h-8 w-8">
+                  <span>{guest.infant}</span>
+                  <button
+                    className="h-8 w-8"
+                    onClick={() => {
+                      if (guest.adult === 0) {
+                        setGuests((g) => ({
+                          ...g,
+                          infant: g.infant + 1,
+                          adult: g.adult + 1,
+                        }));
+                        return;
+                      }
+                      setGuests((g) => ({
+                        ...g,
+                        infant: g.infant + 1,
+                      }));
+                    }}
+                  >
                     <span>
                       <PlusCircleIcon className="h-full w-full stroke-1 text-airbnb-light/60" />
                     </span>
