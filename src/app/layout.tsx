@@ -4,6 +4,7 @@ import "./globals.css";
 import { cn } from "~/lib/utils";
 import Header from "~/components/headers/header";
 import Footer from "~/components/footer";
+import FixedFooter from "~/components/fixed-footer";
 
 const figtree = Figtree({ subsets: ["latin"], variable: "--font-figtree" });
 
@@ -30,6 +31,7 @@ export default function RootLayout({
         <div className="pt-10">
           <Footer />
         </div>
+        <FixedFooter />
       </body>
     </html>
   );
