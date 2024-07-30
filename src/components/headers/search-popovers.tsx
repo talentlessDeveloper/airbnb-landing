@@ -7,6 +7,7 @@ import { Input } from "../ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Separator } from "../ui/separator";
 import { useState } from "react";
+import Link from "next/link";
 
 export function PopoverRegion() {
   return (
@@ -36,38 +37,47 @@ export function PopoverRegion() {
               {
                 src: "https://a0.muscache.com/pictures/f9ec8a23-ed44-420b-83e5-10ff1f071a13.jpg?im_w=320",
                 continent: "I'm flexible",
+                region: "all",
               },
               {
                 src: "https://a0.muscache.com/im/pictures/7b5cf816-6c16-49f8-99e5-cbc4adfd97e2.jpg?im_w=320",
                 continent: "europe",
+                region: "europe",
               },
               {
                 src: "https://a0.muscache.com/im/pictures/dbb2b5ef-2efe-4099-81ac-c7b957f384ed.jpg?im_w=320",
-                continent: "United Kingdom",
+                continent: "Asia",
+                region: "asia",
               },
               {
                 src: "https://a0.muscache.com/im/pictures/4e762891-75a3-4fe1-b73a-cd7e673ba915.jpg?im_w=320",
-                continent: "United States",
+                continent: "North America",
+                region: "northamerica",
               },
               {
                 src: "https://a0.muscache.com/im/pictures/cd9f2bf0-eefc-4980-b7cb-9c8ca3dae883.jpg?im_w=320",
-                continent: "Canada",
+                continent: "South America",
+                region: "southamerica",
               },
               {
                 src: "https://a0.muscache.com/im/pictures/d2309871-490d-452f-a61c-35b19ad3d75e.jpg?im_w=320",
-                continent: "South Africa",
+                continent: "Africa",
+                region: "africa",
               },
             ].map((m, i) => {
               return (
                 <div key={i}>
-                  <button className="flex aspect-square w-[123px] shrink-0 flex-col gap-[0.625rem] rounded-xl duration-200 hover:border hover:border-solid hover:border-airbnb-dark">
+                  <Link
+                    href={`?region=${m.region}`}
+                    className="flex aspect-square w-[123px] shrink-0 flex-col gap-[0.625rem] rounded-xl duration-200 hover:border hover:border-solid hover:border-airbnb-dark"
+                  >
                     <img
                       src={m.src}
                       alt="europe"
                       className="aspect-square h-full w-full rounded-xl object-cover"
                     />
                     <span className="sr-only">Europe</span>
-                  </button>
+                  </Link>
                   <p className="capitalize">{m.continent}</p>
                 </div>
               );

@@ -93,6 +93,37 @@ export const getEntriesByRegion = async (
   region: string,
 ): Promise<AirbnbListing[] | []> => {
   try {
+    if (region === "all") {
+      const contentData = await contentfulClient.getEntries({
+        content_type: "airbnbLanding",
+        "fields.category": region,
+      });
+
+      return contentData.items.map((item: any) => {
+        const {
+          location,
+          title,
+          date,
+          images,
+          rating,
+          price,
+          endDate,
+          region,
+          category,
+        } = item.fields;
+        return {
+          location,
+          title,
+          date,
+          images,
+          rating,
+          price,
+          endDate,
+          region,
+          category,
+        };
+      });
+    }
     const contentData = await contentfulClient.getEntries({
       content_type: "airbnbLanding",
       "fields.region": region,
